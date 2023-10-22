@@ -1,14 +1,12 @@
 """Run a web server providing a Prometheus metrics endpoint."""
 
 import argparse
+from collections.abc import Iterable
 import logging
 import ssl
-import sys
-from collections.abc import Iterable
 from ssl import SSLContext
-from typing import (
-    IO,
-)
+import sys
+from typing import IO
 
 from aiohttp.web import Application
 from prometheus_client import (
@@ -40,7 +38,8 @@ class PrometheusExporterScript(Script):  # type: ignore
     registry: MetricsRegistry
 
     def __init__(
-        self, stdout: IO[bytes] | None = None, stderr: IO[bytes] | None = None
+            self, stdout: IO[bytes] | None = None,
+            stderr: IO[bytes] | None = None
     ) -> None:
         super().__init__(stdout=stdout, stderr=stderr)
         self.registry = MetricsRegistry()
@@ -60,7 +59,7 @@ class PrometheusExporterScript(Script):  # type: ignore
         return logging.getLogger(name=self.name)
 
     def configure_argument_parser(
-        self, parser: argparse.ArgumentParser
+            self, parser: argparse.ArgumentParser
     ) -> None:
         """Add configuration to the ArgumentParser.
 
@@ -97,7 +96,7 @@ class PrometheusExporterScript(Script):  # type: ignore
         """
 
     def create_metrics(
-        self, metric_configs: Iterable[MetricConfig]
+            self, metric_configs: Iterable[MetricConfig]
     ) -> dict[str, Metric]:
         """Create and register metrics from a list of MetricConfigs."""
         return self.registry.create_metrics(metric_configs)
